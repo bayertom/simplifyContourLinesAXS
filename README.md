@@ -30,16 +30,32 @@ The simplification algorithm requires fhe following data:
 
 ![ABN](./data/contours_buffers_fig2.jpg)
 
-Each object, represented by contour line fragment or vertical vertical buffer, is stored in a separate CSV file. The input file contains the Cartesian coordinates X, Y, Z of the vertices of contour lines and buffers. A counto
+Each object, represented by contour line fragment or vertical vertical buffer, is stored in a separate CSV file. The input file contains the Cartesian coordinates X, Y, Z of the vertices of contour lines and buffers.
 
+Source contour c(h), h=271 m, file 'contour_271.0_37.csv.
+The contour name stores its height (271.0) and id(37)
 
-	0.3912   -0.3071   -1.2434  
-	0.1010   0.4371   -1.1216   
-	0.3449   0.3412   -1.2500   
-	-0.2498   0.2537   -0.8900  
-	0.4012   0.0912   -1.0287   
-	0.2398   -0.1096   -0.6590  
-	0.4011   0.1324   -1.0559   
+	716760.3952809327 984135.9742799804 271.0
+	716758.6807809327 984138.3343799805 271.0
+	716752.8364809327 984146.2996799804 271.0
+	716746.4332809327 984157.8285799804 271.0
+	716742.3027809327 984165.8620799804 271.0
+	716740.5406809327 984172.0404799804 271.0
+	716738.4404809327 984176.2855799805 271.0
+	716734.6108809327 984180.2318799804 271.0
+	716729.0500809327 984184.3721799804 271.0
+	716722.7397809327 984188.0845799805 271.0
 
+Vertical buffer c(h - dh), dh = 0.1, h - dh = 270.9, file = 'buffer_B1_270.9_27.csv', example:
+The lower vertical stores its height (270.9) and id(27)
+	-716659.8204298521 -984236.4795014771 270.9
+	-716660.3242005465 -984236.3242001563 270.9
+	-716660.5701419857 -984236.2550386918 270.9
+	-716660.8453549680 -984236.1546448352 270.9
+	-716660.8160002468 -984236.5687168138 270.9
+	-716660.6305784797 -984236.6305785101 270.9
+	-716660.5073158112 -984236.7051947351 270.9
+	-716660.2971106865 -984236.7028892142 270.9
+	-716659.8204298521 -984236.5545886704 270.9
 
 
