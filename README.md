@@ -19,6 +19,26 @@ can be found in \bin directory. To run the software, open the command prompt and
 	simplifyAXS.exe file_name +parameter1=value1 +parameter2=value2 -option
 
 #### Note:
-If exists, the generated output dxf file in the  destination folder, containing results, will be overwritten. For further details, see Sec. 1.6.
+The generated output dxf file in the  destination folder, containing results, will be overwritten. For further details, see Sec. 1.6.
+
+## 1.3 Input file
+
+The simplification algorithm requires fhe following data:
+- Contour line c(h) of the given height h.
+- Vertical buffer formed by the lower contour c(h - dh).
+- Vertical buffer formed by the upper contour c(h + dh).
+
+
+Each object, represented by contour line fragment or vertical vertical buffer, is stored in a separate CSV file. The input file contains the Cartesian coordinates X, Y, Z of the vertices of contour lines and buffers. A counto
+
+
+	0.3912   -0.3071   -1.2434  
+	0.1010   0.4371   -1.1216   
+	0.3449   0.3412   -1.2500   
+	-0.2498   0.2537   -0.8900  
+	0.4012   0.0912   -1.0287   
+	0.2398   -0.1096   -0.6590  
+	0.4011   0.1324   -1.0559   
+
 
 
