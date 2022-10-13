@@ -120,4 +120,15 @@ The weighted version of the generalization tool is run using -w switch. The weig
      
 ### 1.4.1 Setting the smoothing
 
-$\lambda_{1}$
+User-defined smoothness factor can be set using the parameter "lambda1"
+
+	+lambda1=val
+	
+$\lambda_{1}$ regulates the smoothing of simplified contour lines. For common contour topographic maps, $\lambda_{1}$ is
+set so that $\lambda_{1}\in[1,10] $; the contour lines are perceived as naturally smooth.  For highly oscillating 
+contour lines acquired from the point cloud, this value may be significantly higher, and $\lambda_{1}\in 
+[1000,10000]$. 
+
+![ABN](./data/variable_alpha.jpg)
+
+
