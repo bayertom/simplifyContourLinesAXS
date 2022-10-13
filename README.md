@@ -46,6 +46,12 @@ The associated CSV file name contains its height (271.0) and unique id(37)
 	716729.0500809327 984184.3721799804 271.0
 	716722.7397809327 984188.0845799805 271.0
 
+All files in the destination folder, compliant with the user-defined contour mask
+
+     +cont=*contour_lines*.csv
+     
+are processed one by one.
+
 Lower part of the vertical buffer c(h - dh), dh = 0.1, h - dh = 270.9, file = 'buffer_B1_270.9_27.csv', example:
 The associated CSV file name contains its height (270.9) and unique id(27).
 
@@ -58,7 +64,13 @@ The associated CSV file name contains its height (270.9) and unique id(27).
 	716660.5073158112 984236.7051947351 270.9
 	716660.2971106865 984236.7028892142 270.9
 	716659.8204298521 984236.5545886704 270.9
+	
+All files in the destination folder, compliant with the user-defined buffer mask
 
+     +buff1=*buffer_B1*.csv
+     
+are processed one by one.
+	
 Upper part of the vertical buffer c(h + dh), dh = 0.1, h + dh = 271.1, file = 'buffer_B2_271.1_3.csv', example:
 The associated CSV file name contains its height (271.1) and unique id(3).
 
@@ -72,3 +84,8 @@ The associated CSV file name contains its height (271.1) and unique id(3).
 	716778.4438825462 984151.4438826495 271.1
 	716778.3845153574 984151.5065083974 271.1
 	
+All files in the destination folder, compliant with the user-defined buffer mask
+
+     +buff2=*buffer_B2*.csv
+     
+are processed one by one.
