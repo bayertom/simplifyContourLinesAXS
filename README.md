@@ -118,7 +118,7 @@ The weighted version of the generalization tool is run using -w switch. The weig
      simplifyAXS.exe -w +buff1=*buffer_B1*.csv +buff2=*buffer_B2*.csv +cont=*contour_lines*.csv
      
      
-### 1.4.1 Setting the smoothing
+### 1.4.2 Setting the smoothness
 
 User-defined smoothness factor can be set using the parameter "lambda1"
 
@@ -129,6 +129,31 @@ set so that $\lambda_{1}\in[1,10] $; the contour lines are perceived as naturall
 contour lines acquired from the point cloud, this value may be significantly higher, and $\lambda_{1}\in 
 [1000,10000]$. 
 
-![ABN](./data/variable_alpha.jpg)
+#### Example:
+*Non-weighted version of the partial dispacement with the smoothing factor $\lambda_{1}=2$*
+
+     simplifyAXS.exe +lambda1=2 +buff1=*buffer_B1*.csv +buff2=*buffer_B2*.csv +cont=*contour_lines*.csv
+
+![ABN](./data/variable_alpha2.jpg)
+
+### 1.4.3 Setting the symmetry
+
+User-defined symmetry factor can be set using the parameter "lambda2"
+
+	+lambda2=val
+	
+$\lambda_{2}$ regulates the symmetry of simplified contour line due to the vertical buffer. Increasing the values of λ2, the simplified contour gradually moves to the center of vertical buffer. Its values are slightly smaller than $\lambda_{1}$, we set $\lambda_{2}=$\lambda_{1}/2$.
+
+#### Example:
+*Non-weighted version of the partial dispacement with the smoothing factor $\lambda_{1}=2$ and symmetry factor $\lambda_{1}=2$*
+
+     simplifyAXS.exe +lambda1=2 +lambda2=2 +buff1=*buffer_B1*.csv +buff2=*buffer_B2*.csv +cont=*contour_lines*.csv
+
+![ABN](./data/smoothing_lambda_compare.jpg)
+
+The resulting solution is a balanced combination of three factors, shape similarity,
+smoothness, and symmetry, regulated by three input parameters
+$w_{i}$, $\lambda_{1}$, and $\lambda_{2}$.
+
 
 
