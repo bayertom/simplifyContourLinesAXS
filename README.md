@@ -110,9 +110,14 @@ The bundled Python script
 
 ### 1.4.1 Setting the weighted version
 
-The weighted version of the generalization tool is run using -w switch. Because the inverted matrices can not be preacomputed, the processing is significantly slower.
+The weighted version of the generalization tool is run using -w switch. The weight wi depends on the angle ωi between the segments. Because the inverted matrices can not be precomputed, the processing is significantly slower.
 
 #### Example:
 *Weighted version of the partial dispacement*
 
-     simplifyAXS.exe -w +path=..//data//csv// +buff1=*buffer_B1*.csv +buff2=*buffer_B2*.csv +cont=*contour_lines*.csv
+     simplifyAXS.exe -w +buff1=*buffer_B1*.csv +buff2=*buffer_B2*.csv +cont=*contour_lines*.csv
+     
+     
+### 1.4.1 Setting the smoothing
+
+$\lambda_{1}$
