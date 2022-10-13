@@ -31,7 +31,7 @@
 #include "PointLineDistance.h"
 #include "SplineSmoothing.h"
 
-TVector2D < std::shared_ptr <Point3D > > ContourLinesSimplify::smoothContourLinesBySplineE(const TVector2D <std::shared_ptr <Point3D > >& contours, std::multimap <double, TVector < std::shared_ptr < Point3D > > >& contour_points_buffers_dz1, std::multimap <double, TVector < std::shared_ptr < Point3D > > >& contour_points_buffers_dz2, const double z_step, const double dz_threshold, const unsigned int min_points, const double lambda1, const double lambda2, const bool weighted)
+TVector2D < std::shared_ptr <Point3D > > ContourLinesSimplify::smoothContourLinesBySplineE(const TVector2D <std::shared_ptr <Point3D > >& contours, std::multimap <double, TVector < std::shared_ptr < Point3D > > >& contour_points_buffers_dz1, std::multimap <double, TVector < std::shared_ptr < Point3D > > >& contour_points_buffers_dz2, const double dz_threshold, const unsigned int min_points, const double lambda1, const double lambda2, const bool weighted)
 {
 	//Simplify contour lines inside the corridor using the spline (Eigen version)
 	TVector2D <std::shared_ptr <Point3D > > contours_smoothed;

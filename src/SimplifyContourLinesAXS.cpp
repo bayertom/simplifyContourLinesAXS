@@ -28,8 +28,7 @@ int main(int argc, char* argv[])
 	//Initial parameters of the contour lines and the simplification
 	bool weighted = false;
 	int min_points = 20;
-	double z_min = 110.0, z_max = 650.0, z_step = 1.0;
-	double dz_threshold = 0.10;
+	double z_min = 110.0, z_max = 650.0, dz = 0.10;;
 	double lambda1 = 2.0, lambda2 = 2.0;
 	
 	//Path to the folder
@@ -103,16 +102,10 @@ int main(int argc, char* argv[])
 			if (attribute == NULL || value == NULL)
 				throw Exception("Exception: Invalid value in command line!");
 
-			//Set dz threshold
+			//Set z_step
 			if (!strcmp("dz", attribute))
 			{
-				dz_threshold = std::max(std::min(atof(value), 1.0), 0.0);
-			}
-
-			//Set z_step
-			else if (!strcmp("z_step", attribute))
-			{
-				z_step = std::max(std::min(atof(value), 10.0), 0.1);
+				dz = std::max(std::min(atof(value), 1.0), 0.0);
 			}
 
 
@@ -176,7 +169,7 @@ int main(int argc, char* argv[])
 	//Write parameters
 	std::cout << "*** SIMPLIFY CONTOUR LINES, AXIAL SPLINES ***\n\n";
 	std::cout << ">>> Input parameters: \n" <<
-		"  Buffer height = " << dz_threshold << '\n' <<
+		"  Buffer height = " << dz << '\n' <<
 		"  Lambda1 = " << lambda1 << '\n' <<
 		"  Lambda2 = " << lambda2 << '\n' <<
 		"  Weighted = " << weighted << '\n' <<
@@ -216,10 +209,10 @@ int main(int argc, char* argv[])
 	try
 	{
 		//Patial displacement with axial spline
-		TVector2D <std::shared_ptr <Point3D > > contours_polylines_smooth = ContourLinesSimplify::smoothContourLinesBySplineE(contours_polylines, contour_buffers1, contour_buffers2, z_step, dz_threshold, min_points,lambda1, lambda2, weighted);
+		TVector2D <std::shared_ptr <Point3D > > contours_polylines_smooth = ContourLinesSimplify::smoothContourLinesBySplineE(contours_polylines, contour_buffers1, contour_buffers2, dz, min_points,lambda1, lambda2, weighted);
 
 		//Export simplified contour lines to DXF
-		std::string file_name_simp = "results_" + output_file_name + "_simp_dz_" + std::format("{:.2f}", dz_threshold) + "_lambda1_"
+		std::string file_name_simp = "results_" + output_file_name + "_simp_dz_" + std::format("{:.2f}", dz) + "_lambda1_"
 			+ std::format("{:.2f}", lambda1) + "_lambda2_" + std::format("{:.2f}", lambda2) + "_weighted_" 
 			+ std::format("{:1}", int(weighted)) + ".dxf";
 		
