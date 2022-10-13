@@ -33,7 +33,7 @@ The simplification algorithm requires fhe following data:
 Each object, represented by contour line fragment or vertical vertical buffer, is stored in a separate CSV file. The input file contains the Cartesian coordinates X, Y, Z of the vertices of contour lines and buffers.
 
 Source contour c(h), h=271 m, file 'contour_271.0_37.csv.
-The contour name stores its height (271.0) and id(37)
+The associated CSV file name contains its height (271.0) and unique id(37)
 
 	716760.3952809327 984135.9742799804 271.0
 	716758.6807809327 984138.3343799805 271.0
