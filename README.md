@@ -155,5 +155,11 @@ The resulting solution is a balanced combination of three factors, shape similar
 smoothness, and symmetry, regulated by three input parameters
 $w_{i}$, $\lambda_{1}$, and $\lambda_{2}$.
 
+### 1.4.4 Setting the vertical buffer height
 
+User-defined height of the vertical buffer can be set using the parameter "dh"
+
+	+dz=val
+	
+Currently, we set dh < 0.3 * contour interval.
 
