@@ -28,6 +28,7 @@ The simplification algorithm requires fhe following data:
 - Vertical buffer formed by the lower contour c(h - dh).
 - Vertical buffer formed by the upper contour c(h + dh).
 
+![ABN](./contour_buffers_fig2.pdf)
 
 Each object, represented by contour line fragment or vertical vertical buffer, is stored in a separate CSV file. The input file contains the Cartesian coordinates X, Y, Z of the vertices of contour lines and buffers. A counto
 
