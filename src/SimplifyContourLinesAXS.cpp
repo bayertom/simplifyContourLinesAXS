@@ -82,7 +82,6 @@ int main(int argc, char* argv[])
 		}
 
 
-
 		//Set values
 		else if (*argv[argc] == '+')
 		{
@@ -180,6 +179,7 @@ int main(int argc, char* argv[])
 		"  Buffer height = " << dz_threshold << '\n' <<
 		"  Lambda1 = " << lambda1 << '\n' <<
 		"  Lambda2 = " << lambda2 << '\n' <<
+		"  Weighted = " << weighted << '\n' <<
 		"  Contour mask =" << contours_file_mask << '\n' <<
 		"  Buffer 1 mask = " << buff1_file_mask << '\n' <<
 		"  Buffer 2 mask = " << buff2_file_mask << '\n' <<
@@ -220,7 +220,8 @@ int main(int argc, char* argv[])
 
 		//Export simplified contour lines to DXF
 		std::string file_name_simp = "results_" + output_file_name + "_simp_dz_" + std::format("{:.2f}", dz_threshold) + "_lambda1_"
-			+ std::format("{:.2f}", lambda1) + "_lambda2_" + std::format("{:.2f}", lambda2) + ".dxf";
+			+ std::format("{:.2f}", lambda1) + "_lambda2_" + std::format("{:.2f}", lambda2) + "_weighted_" 
+			+ std::format("{:1}", int(weighted)) + ".dxf";
 		
 		DXFExport::exportContourLinesToDXF(file_name_simp, contours_polylines_smooth, 10.0);
 	}

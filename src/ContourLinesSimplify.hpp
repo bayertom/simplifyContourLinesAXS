@@ -156,7 +156,7 @@ TVector2D < std::shared_ptr <Point3D > > ContourLinesSimplify::smoothContourLine
 						double n2 = sqrt(dx2 * dx2 + dy2 * dy2);
 						double arg = (dx1 * dx2 + dy1 * dy2) / (n1 * n2);
 						double om = acos(arg);
-						double w = 1.0 * sin(0.5 * om);
+						double w = sin(0.5 * om);
 						W.insert(i, i) = w * w;
 					}
 				}
