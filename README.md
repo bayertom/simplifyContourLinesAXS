@@ -21,7 +21,7 @@ can be found in \bin directory. To run the software, open the command prompt and
 #### Note:
 The generated output dxf file in the  destination folder, containing results, will be overwritten. For further details, see Sec. 1.6.
 
-## 1.3 Input file
+## 1.3 Input files
 
 The simplification algorithm requires fhe following data:
 - Contour line c(h) of the given height h.
