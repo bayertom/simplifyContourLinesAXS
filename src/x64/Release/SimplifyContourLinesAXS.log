@@ -1,0 +1,38 @@
+﻿  SimplifyContourLinesAXS.cpp
+E:\Tomas\CPP\SimplifyContourLinesAXS\src\ContourLinesSimplify.hpp(124,30): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+E:\Tomas\CPP\SimplifyContourLinesAXS\src\ContourLinesSimplify.hpp(231,30): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+E:\Tomas\CPP\SimplifyContourLinesAXS\src\ContourLinesSimplify.hpp(231,30): warning C4267: 'initializing': conversion from 'size_t' to 'const int', possible loss of data
+E:\Tomas\CPP\SimplifyContourLinesAXS\src\ContourLinesSimplify.hpp(234,39): warning C4305: 'argument': truncation from 'double' to 'const _Ty'
+          with
+          [
+              _Ty=float
+          ]
+E:\Tomas\CPP\SimplifyContourLinesAXS\src\ContourLinesSimplify.hpp(242,88): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+E:\Tomas\CPP\SimplifyContourLinesAXS\src\ContourLinesSimplify.hpp(242,88): warning C4267: 'initializing': conversion from 'size_t' to 'const int', possible loss of data
+E:\Tomas\CPP\SimplifyContourLinesAXS\src\ContourLinesSimplify.hpp(258,19): warning C4244: '=': conversion from 'const double' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=float
+          ]
+E:\Tomas\CPP\SimplifyContourLinesAXS\src\DXFExport.hpp(266,40): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
+E:\Tomas\CPP\SimplifyContourLinesAXS\src\DXFExport.hpp(266,40): warning C4267: 'initializing': conversion from 'size_t' to 'const unsigned int', possible loss of data
+E:\Tomas\CPP\SimplifyContourLinesAXS\src\SplineSmoothing.hpp(24,31): warning C4244: 'initializing': conversion from 'Eigen::Index' to 'unsigned int', possible loss of data
+E:\Tomas\CPP\SimplifyContourLinesAXS\src\ContourLinesSimplify.hpp(165): message : see reference to function template instantiation 'std::tuple<Eigen::SparseMatrix<double,0,int>,Eigen::SparseMatrix<double,0,int>> SplineSmoothing::smoothPolylineCorridorE<double>(const Eigen::SparseMatrix<double,0,int> &,const Eigen::SparseMatrix<double,0,int> &,const Eigen::SparseMatrix<double,0,int> &,const Eigen::SparseMatrix<double,0,int> &,const Eigen::SparseMatrix<double,0,int> &,const Eigen::SparseMatrix<double,0,int> &,const Eigen::SparseMatrix<double,0,int> &,const T,const T,const int)' being compiled
+          with
+          [
+              T=double
+          ]
+E:\Tomas\CPP\SimplifyContourLinesAXS\src\SplineSmoothing.hpp(24,23): warning C4244: 'initializing': conversion from 'Eigen::Index' to 'const unsigned int', possible loss of data
+E:\Tomas\CPP\SimplifyContourLinesAXS\src\SplineSmoothing.hpp(69,31): warning C4244: 'initializing': conversion from 'Eigen::Index' to 'unsigned int', possible loss of data
+E:\Tomas\CPP\SimplifyContourLinesAXS\src\ContourLinesSimplify.hpp(165): message : see reference to function template instantiation 'std::tuple<Eigen::SparseMatrix<double,0,int>,Eigen::SparseMatrix<double,0,int>> SplineSmoothing::smoothPolylineCorridorE<double>(const Eigen::SparseMatrix<double,0,int> &,const Eigen::SparseMatrix<double,0,int> &,const Eigen::SparseMatrix<double,0,int> &,const Eigen::SparseMatrix<double,0,int> &,const Eigen::SparseMatrix<double,0,int> &,const Eigen::SparseMatrix<double,0,int> &,const Eigen::SparseMatrix<double,0,int> &,const Eigen::SparseMatrix<double,0,int> &,const T,const T,const int)' being compiled
+          with
+          [
+              T=double
+          ]
+E:\Tomas\CPP\SimplifyContourLinesAXS\src\SplineSmoothing.hpp(69,23): warning C4244: 'initializing': conversion from 'Eigen::Index' to 'const unsigned int', possible loss of data
+  Generating code
+  9 of 4029 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    60 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  SimplifyContourLinesAXS.vcxproj -> E:\Tomas\CPP\SimplifyContourLinesAXS\src\x64\Release\SimplifyContourLinesAXS.exe
