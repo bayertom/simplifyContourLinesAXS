@@ -89,3 +89,18 @@ All files in the destination folder, compliant with the user-defined buffer mask
      +buff2=*buffer_B2*.csv
      
 are processed one by one.
+
+### 1.31 Conversion of files
+The bundled Python script
+
+     writeContourLines.py
+     
+ converts the input shape file to the desired CSV format. All contour lines are processed sequentially. It is necessary to set the full path to the shp file
+ 
+     #Export each polyline into separate txt file
+     input_feature_class =  r'e:\Test\SimplifyContourLinesAXS\data\shp\contour_lines_source_clip.shp'
+     writeContourLines(input_feature_class)
+     
+ It depends on the ArcPy library (2.7 or 3.6 versions are supported):
+ 
+ https://www.esri.com/en-us/arcgis/products/arcgis-python-libraries/libraries/arcpy
