@@ -103,4 +103,16 @@ The bundled Python script
      
  It depends on the ArcPy library (2.7 or 3.6 versions are supported):
  
- https://www.esri.com/en-us/arcgis/products/arcgis-python-libraries/libraries/arcpy
+           https://www.esri.com/en-us/arcgis/products/arcgis-python-libraries/libraries/arcpy
+
+## 1.4 List of parameters
+
+
+### 1.4.1 Setting the weighted version
+
+The weighted version of the generalization tool is run using -w switch. Because the inverted matrices can not be preacomputed, the processing is significantly slower.
+
+#### Example:
+*Weighted version of the partial dispacement*
+
+     simplifyAXS.exe -w +path=..//data//csv// +buff1=*buffer_B1*.csv +buff2=*buffer_B2*.csv +cont=*contour_lines*.csv
