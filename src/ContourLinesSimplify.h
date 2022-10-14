@@ -27,7 +27,7 @@
 class ContourLinesSimplify
 {
 	public:
-		static TVector2D < std::shared_ptr <Point3D > >  smoothContourLinesBySplineE(const TVector2D <std::shared_ptr <Point3D > >& contours, std::multimap <double, TVector < std::shared_ptr < Point3D > > >& contour_points_buffers_dz1, std::multimap <double, TVector < std::shared_ptr < Point3D > > >& contour_points_buffers_dz2, const double dz_threshold, const unsigned int min_points, const double lambda1, const double lambda2, const bool weighted);
+		static TVector2D < std::shared_ptr <Point3D > >  smoothContourLinesBySplineE(const TVector2D <std::shared_ptr <Point3D > >& contours, std::multimap <double, TVector < std::shared_ptr < Point3D > > >& contour_points_buffers_dz1, std::multimap <double, TVector < std::shared_ptr < Point3D > > >& contour_points_buffers_dz2, const double dh, const unsigned int min_points, const double lambda1, const double lambda2, const bool weighted);
 	private:	
 		static TVector2D <std::shared_ptr <Point3D > > splitContourLine (const TVector <std::shared_ptr <Point3D > > &c, const int np);
 		static std::tuple<TVector <int>, TVector <int>, TVector <float>, TVector <std::shared_ptr <Point3D > > > findNearestNeighbors(const TVector <std::shared_ptr <Point3D> >& qpoints, const TVector2D <std::shared_ptr <Point3D> >& buffers, const int i1, TVector <int>& buffer_ids);

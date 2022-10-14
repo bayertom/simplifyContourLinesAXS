@@ -31,7 +31,7 @@
 #include "PointLineDistance.h"
 #include "SplineSmoothing.h"
 
-TVector2D < std::shared_ptr <Point3D > > ContourLinesSimplify::smoothContourLinesBySplineE(const TVector2D <std::shared_ptr <Point3D > >& contours, std::multimap <double, TVector < std::shared_ptr < Point3D > > >& contour_points_buffers_dz1, std::multimap <double, TVector < std::shared_ptr < Point3D > > >& contour_points_buffers_dz2, const double dz_threshold, const unsigned int min_points, const double lambda1, const double lambda2, const bool weighted)
+TVector2D < std::shared_ptr <Point3D > > ContourLinesSimplify::smoothContourLinesBySplineE(const TVector2D <std::shared_ptr <Point3D > >& contours, std::multimap <double, TVector < std::shared_ptr < Point3D > > >& contour_points_buffers_dh1, std::multimap <double, TVector < std::shared_ptr < Point3D > > >& contour_points_buffers_dh2, const double dh, const unsigned int min_points, const double lambda1, const double lambda2, const bool weighted)
 {
 	//Simplify contour lines inside the corridor using the spline (Eigen version)
 	TVector2D <std::shared_ptr <Point3D > > contours_smoothed;
@@ -58,58 +58,54 @@ TVector2D < std::shared_ptr <Point3D > > ContourLinesSimplify::smoothContourLine
 	for (auto c : contours)
 	{
 		//Get height of the contour
-		const double z1 = c[0]->getZ() - dz_threshold;
-		const double z1r = Round::roundNumber(z1, 2);
-		const double z2 = c[0]->getZ() + dz_threshold;
-		const double z2r = Round::roundNumber(z2, 2);
+		const double h1 = c[0]->getZ() - dh;
+		const double h1r = Round::roundNumber(h1, 2);
+		const double h2 = c[0]->getZ() + dh;
+		const double h2r = Round::roundNumber(h2, 2);
 
 		//Print z
-		std::cout << ">>> Z = " << c[0]->getZ() << "m, n = " << c.size() << ":\n";
+		std::cout << ">>> H = " << c[0]->getZ() << "m, n = " << c.size() << ":\n";
 
-		//Find corresponding buffer z - dz
-		TVector2D < std::shared_ptr<Point3D > > contour_points_buffer_dz1;
-
-		//Find corresponding buffer z - dz
-		auto res1 = contour_points_buffers_dz1.equal_range(z1r);
+		//Find corresponding buffer h - dh
+		TVector2D < std::shared_ptr<Point3D > > contour_points_buffer_dh1;
+		auto res1 = contour_points_buffers_dh1.equal_range(h1r);
 
 		///No buffer found
 		if (res1.first == res1.second)
 			continue;
 
-		// Buffer z - dz already created
+		// Buffer h - dh already created
 		else
 		{
 			//Copy buffer segments
 			for (auto it = res1.first; it != res1.second; ++it)
 			{
 				if (it->second.size() > min_points)
-					contour_points_buffer_dz1.push_back(it->second);
+					contour_points_buffer_dh1.push_back(it->second);
 			}
 		}
 
-		//Find corresponding buffer z + dz
-		TVector2D < std::shared_ptr<Point3D > > contour_points_buffer_dz2;
-
-		//Find corresponding buffer z - dz
-		auto res2 = contour_points_buffers_dz2.equal_range(z2r);
+		//Find corresponding buffer h + dh
+		TVector2D < std::shared_ptr<Point3D > > contour_points_buffer_dh2;
+		auto res2 = contour_points_buffers_dh2.equal_range(h2r);
 
 		///No buffer found
 		if (res2.first == res2.second)
 			continue;
 
-		// Buffer z + dz already created
+		// Buffer h + dh already created
 		else
 		{
 			//Copy buffer segments
 			for (auto it = res2.first; it != res2.second; ++it)
 			{
 				if (it->second.size() > min_points)
-					contour_points_buffer_dz2.push_back(it->second);
+					contour_points_buffer_dh2.push_back(it->second);
 			}
 		}
 
 		//Are there enough points?
-		if ((c.size() > min_points) && (contour_points_buffers_dz1.size() > 0) && (contour_points_buffers_dz2.size() > 0))
+		if ((c.size() > min_points) && (contour_points_buffers_dh1.size() > 0) && (contour_points_buffers_dh2.size() > 0))
 		{
 			//Resulted contour line
 			TVector  <std::shared_ptr <Point3D > > contour_smoothed;
@@ -125,8 +121,8 @@ TVector2D < std::shared_ptr <Point3D > > ContourLinesSimplify::smoothContourLine
 
 				//Find NN to contour line vertices
 				TVector<int> buffer_ids1(n, -1), buffer_ids2(n, -1), buffer_ids3(n, -1), buffer_ids4(n, -1);
-				auto [nn_buffs1, nn_idxs1, nn_dist1, nn_points1] = findNearestNeighbors(cp, contour_points_buffer_dz1, i1, buffer_ids1);
-				auto [nn_buffs2, nn_idxs2, nn_dist2, nn_points2] = findNearestNeighbors(cp, contour_points_buffer_dz2, i1, buffer_ids2);
+				auto [nn_buffs1, nn_idxs1, nn_dist1, nn_points1] = findNearestNeighbors(cp, contour_points_buffer_dh1, i1, buffer_ids1);
+				auto [nn_buffs2, nn_idxs2, nn_dist2, nn_points2] = findNearestNeighbors(cp, contour_points_buffer_dh2, i1, buffer_ids2);
 
 				//Create supplementary matrices
 				Eigen::SparseMatrix <double> X(n, 1), Y(n, 1), X1(n, 1), Y1(n, 1), X2(n, 1), Y2(n, 1), W(n, n);
