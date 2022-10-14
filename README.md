@@ -6,8 +6,10 @@ Basic properties and features of the simplification algorithm, the input data an
 
 The source code of the simplification software written in C++ (C++ 2020) is bundled as the Visual Studio 2022 project. 
 It depends on the Eigen library
+
 - Eigen, https://gitlab.com/libeigen/eigen, 
-which is bundled.
+
+which is bundled. The conversion software preparing the input data (SHP to CSV) was written in Python 2.7.
 
 ## 1.2. Running the software
 
