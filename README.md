@@ -89,7 +89,7 @@ All files in the destination folder, compliant with the user-defined buffer mask
 
      +buff2=*buffer_B2*.csv
      
-are processed one by one. For further details of setting dh, se Sec. 1.4.4.
+are processed one by one. For further details of setting dh, see Sec. 1.4.4.
 
 ### 1.31 Conversion of files
 The bundled Python script
