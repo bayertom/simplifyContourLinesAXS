@@ -2,14 +2,14 @@
 #define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
 
 #include <vector>
-#include <set>
-#include <map>
+//#include <set>
+//#include <map>
 #include <fstream>
 #include <sstream>
 #include <iostream>
 #include <memory>
 #include <format>
-#include <algorithm>
+//#include <algorithm>
 #include <string>
 #include <filesystem>
 
@@ -19,7 +19,6 @@
 #include "File.h"
 #include "ContourLinesSimplify.h"
 #include "DXFExport.h"
-//#include "Point3D.h"
 #include "SplineSmoothing.h"
 
 
@@ -212,7 +211,7 @@ int main(int argc, char* argv[])
 		TVector2D <std::shared_ptr <Point3D > > contours_polylines_smooth = ContourLinesSimplify::smoothContourLinesBySplineE(contours_polylines, contour_buffers1, contour_buffers2, dh, min_points,lambda1, lambda2, weighted);
 
 		//Export simplified contour lines to DXF
-		std::string file_name_simp = "results_" + output_file_name + "_simp_dz_" + std::format("{:.2f}", dh) + "_lambda1_"
+		std::string file_name_simp = "results_" + output_file_name + "_simp_dh_" + std::format("{:.2f}", dh) + "_lambda1_"
 			+ std::format("{:.2f}", lambda1) + "_lambda2_" + std::format("{:.2f}", lambda2) + "_weighted_" 
 			+ std::format("{:1}", int(weighted)) + ".dxf";
 		

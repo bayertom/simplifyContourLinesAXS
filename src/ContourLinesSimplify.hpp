@@ -41,7 +41,7 @@ TVector2D < std::shared_ptr <Point3D > > ContourLinesSimplify::smoothContourLine
 
 	std::cout << "\n>>> PHASE: Smoothing contour lines \n\n";
 
-	//Input parameters of the spline
+	//Input parameters of the axial spline
 	const int d = 2, n_points = 2000;
 
 	//Precompute inverse matrix
@@ -54,7 +54,7 @@ TVector2D < std::shared_ptr <Point3D > > ContourLinesSimplify::smoothContourLine
 	solver.compute(W0 + lambda1 * D0T * D0 + 2.0 * lambda2 * E0);
 	I0 = solver.solve(E0);
 
-
+	//Process all contour lines
 	for (auto c : contours)
 	{
 		//Get height of the contour
@@ -63,7 +63,7 @@ TVector2D < std::shared_ptr <Point3D > > ContourLinesSimplify::smoothContourLine
 		const double h2 = c[0]->getZ() + dh;
 		const double h2r = Round::roundNumber(h2, 2);
 
-		//Print z
+		//Print h
 		std::cout << ">>> H = " << c[0]->getZ() << "m, n = " << c.size() << ":\n";
 
 		//Find corresponding buffer h - dh
@@ -110,19 +110,18 @@ TVector2D < std::shared_ptr <Point3D > > ContourLinesSimplify::smoothContourLine
 			//Resulted contour line
 			TVector  <std::shared_ptr <Point3D > > contour_smoothed;
 
-			//Split contour line to parts
+			//Split contour line to parts formed by n points
 			const TVector2D  <std::shared_ptr <Point3D > > cparts = splitContourLine(c, n_points);
-			int idx2 = 0;
+
+			//Process parts of the contour line
 			for (auto cp : cparts)
 			{
-
 				std::cout << ".";
-				int i1 = 0, n = cp.size();
+				int n = cp.size();
 
 				//Find NN to contour line vertices
-				TVector<int> buffer_ids1(n, -1), buffer_ids2(n, -1), buffer_ids3(n, -1), buffer_ids4(n, -1);
-				auto [nn_buffs1, nn_idxs1, nn_dist1, nn_points1] = findNearestNeighbors(cp, contour_points_buffer_dh1, i1, buffer_ids1);
-				auto [nn_buffs2, nn_idxs2, nn_dist2, nn_points2] = findNearestNeighbors(cp, contour_points_buffer_dh2, i1, buffer_ids2);
+				auto [nn_buffs1, nn_idxs1, nn_dist1, nn_points1] = findNearestNeighbors(cp, contour_points_buffer_dh1);
+				auto [nn_buffs2, nn_idxs2, nn_dist2, nn_points2] = findNearestNeighbors(cp, contour_points_buffer_dh2);
 
 				//Create supplementary matrices
 				Eigen::SparseMatrix <double> X(n, 1), Y(n, 1), X1(n, 1), Y1(n, 1), X2(n, 1), Y2(n, 1), W(n, n);
@@ -142,17 +141,26 @@ TVector2D < std::shared_ptr <Point3D > > ContourLinesSimplify::smoothContourLine
 				{
 					for (int i = 1; i < n - 1; i++)
 					{
-						int i0 = std::max(0, i - 5);
-						int i2 = std::min(n - 1, i + 5);
-						double dx1 = cp[i0]->getX() - cp[i]->getX();
-						double dy1 = cp[i0]->getY() - cp[i]->getY();
-						double dx2 = cp[i2]->getX() - cp[i]->getX();
-						double dy2 = cp[i2]->getY() - cp[i]->getY();
-						double n1 = sqrt(dx1 * dx1 + dy1 * dy1);
-						double n2 = sqrt(dx2 * dx2 + dy2 * dy2);
-						double arg = (dx1 * dx2 + dy1 * dy2) / (n1 * n2);
-						double om = acos(arg);
-						double w = sin(0.5 * om);
+						//K points forward and backward
+						const int i0 = std::max(0, i - 5);
+						const int i2 = std::min(n - 1, i + 5);
+						
+						//Coordinate differences
+						const double dx1 = cp[i0]->getX() - cp[i]->getX();
+						const double dy1 = cp[i0]->getY() - cp[i]->getY();
+						const double dx2 = cp[i2]->getX() - cp[i]->getX();
+						const double dy2 = cp[i2]->getY() - cp[i]->getY();
+						
+						//Norms
+						const double n1 = sqrt(dx1 * dx1 + dy1 * dy1);
+						const double n2 = sqrt(dx2 * dx2 + dy2 * dy2);
+						
+						//Angle between segments
+						const double arg = (dx1 * dx2 + dy1 * dy2) / (n1 * n2);
+						const double om = acos(arg);
+
+						//Weight
+						const double w = sin(0.5 * om);
 						W.insert(i, i) = w * w;
 					}
 				}
@@ -221,7 +229,7 @@ TVector2D <std::shared_ptr <Point3D > > ContourLinesSimplify::splitContourLine(c
 }
 
 
-std::tuple<TVector <int>, TVector <int>, TVector <float>, TVector <std::shared_ptr <Point3D > > > ContourLinesSimplify::findNearestNeighbors(const TVector <std::shared_ptr <Point3D> >& qpoints, const TVector2D <std::shared_ptr <Point3D> >& buffers, const int i1, TVector <int>& buffer_ids)
+std::tuple<TVector <int>, TVector <int>, TVector <float>, TVector <std::shared_ptr <Point3D > > > ContourLinesSimplify::findNearestNeighbors(const TVector <std::shared_ptr <Point3D> >& qpoints, const TVector2D <std::shared_ptr <Point3D> >& buffers)
 {
 	//Find nearest neighbor to any contour line vertex
 	const int n = qpoints.size();
@@ -233,11 +241,8 @@ std::tuple<TVector <int>, TVector <int>, TVector <float>, TVector <std::shared_p
 	//Process all query points
 	for (int i = 0; i < n; i++)
 	{
-		//Check specific buffer fragments
-		const int j_start_buff = (buffer_ids[i + i1] == -1 ? 0 : buffer_ids[i + i1]);
-		const int j_end_buff = (buffer_ids[i + i1] == -1 ? buffers.size() : j_start_buff + 1);
-
-		for (int j = j_start_buff; j < j_end_buff; j++)
+		//Process all buffer fragments
+		for (int j = 0; j < buffers.size(); j++)
 		{
 			//Find nearest line segment point
 			const auto [i_min, d_min, xi_min, yi_min] = getNearestLineSegmentPoint(qpoints[i]->getX(), qpoints[i]->getY(), buffers[j]);
@@ -253,9 +258,6 @@ std::tuple<TVector <int>, TVector <int>, TVector <float>, TVector <std::shared_p
 				nn_idxs[i] = i_min;
 				nn_dists[i] = d_min;
 				nn_points[i] = p_min;
-
-				//Actualize nearest buffer fragment
-				buffer_ids[i + i1] = j;
 			}
 		}
 	}
@@ -286,8 +288,6 @@ std::tuple<int, double, double, double> ContourLinesSimplify::getNearestLineSegm
 
 	return { i_min, d_min, xi_min, yi_min };
 }
-
-
 
 
 #endif

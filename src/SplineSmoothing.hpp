@@ -39,7 +39,6 @@ std::tuple<Eigen::SparseMatrix <T>, Eigen::SparseMatrix <T> > SplineSmoothing::s
 	auto YS = I * (W * Y + lambda2 * (Y1 + Y2));
 
 	return { XS, YS };
-
 }
 
 
@@ -77,7 +76,7 @@ std::tuple<Eigen::SparseMatrix <T>, Eigen::SparseMatrix <T> > SplineSmoothing::s
 		I = I0;
 	}
 
-	//Compute new inverse metrix
+	//Different size, compute new inverse metrix
 	else
 	{
 		Eigen::SparseMatrix <double> E(m, m);

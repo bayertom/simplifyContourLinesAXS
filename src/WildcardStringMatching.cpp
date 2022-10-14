@@ -9,6 +9,7 @@ bool WildcardStringMatching::matchStringToPattern(std::string s, std::string p)
         return dp[s.size()][p.size()] = findMatching(s, p, dp, s.size() - 1, p.size() - 1);
 }
 
+
 int WildcardStringMatching::findMatching(std::string &s, std::string &p, TVector2D <int> &dp, int n, int m)
 {
         //Return 1 if n and m are negative
