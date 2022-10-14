@@ -203,7 +203,7 @@ File masks can consist of any combination of the following:
  - Question mark (?) - Represents any single character.
  - Asterisk (\*) - Represents any sequence of characters.
 
-The file mask are case sensitive!
+The file mask is case sensitive!
 
 #### Example:
 *The following file mask* 
