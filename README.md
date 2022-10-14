@@ -190,7 +190,7 @@ All input files need to be stored in the same folder. Use symbol '//' instead of
 
      simplifyAXS.exe +lambda1=2 +lambda2=2 +dh=0.1 +path=..//data//csv// +buff1=*buffer_B1*.csv +buff2=*buffer_B2*.csv +cont=*contour_lines*.csv
 
-### 1.4.6 Setting the contour lines file mask
+### 1.4.6 Setting the contour lines file 
 
 User-defined file mask for loading contour line files can be set using the parameter "cont"
 
@@ -206,11 +206,11 @@ File masks can consist of any combination of the following:
 The file mask are case sensitive!
 
 #### Example:
-The following file mask 
+*The following file mask* 
       
        *buffer_B1*.csv
 
-includes all CSV files containg the string 'buffer_B1' in the filename.
+*includes all CSV files containg the string 'buffer_B1' in the filename.*
 
 ### 1.4.7 Setting the vertical buffers file masks
 
