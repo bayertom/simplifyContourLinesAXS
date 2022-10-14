@@ -233,4 +233,4 @@ For GIS users, the folder /data/shp contains the ArcMap project
      
 The source contour lines, both vertical buffers and simplified results are bundled.
 
-![Results2(./data/results2jpg)
+![Results2(./data/results2.jpg)
