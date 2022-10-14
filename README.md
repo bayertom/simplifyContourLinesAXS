@@ -205,7 +205,7 @@ The file mask are case sensitive!
 #### Example:
 The following file mask 
       
-      *buffer_B1*.csv
+       *buffer_B1*.csv
 
 includes all CSV files containg the string 'buffer_B1' in the filename.
 
