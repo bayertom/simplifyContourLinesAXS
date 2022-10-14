@@ -164,7 +164,60 @@ User-defined height of the vertical buffer can be set using the parameter "dh"
 Currently, we set dh < 0.3 * contour interval. This value has a crucial importance and must be in accordance with the input data formed by two vertical buffers, $c(h-dh)$ and $c(h-dh)$. Recall that dh value is used as part of both filenames; see Sec. 1.3. For example:
 
       'buffer_B1_270.9_27.csv'
-      'buffer_B2_271.1_3.csv',
+      'buffer_B2_271.1_3.csv'
+      
+#### Example:
+*Non-weighted version of the partial dispacement with the smoothing factor $\lambda_{1}=2$,symmetry factor $\lambda_{1}=2$, and buffer width $dh=0.1$*
+
+     simplifyAXS.exe +lambda1=2 +lambda2=2 +dh=0.1 +buff1=*buffer_B1*.csv +buff2=*buffer_B2*.csv +cont=*contour_lines*.csv
 
 ![Buffers](./data/buffers2_0_15.jpg)
 
+
+### 1.4.5 Setting the path
+
+User-defined path to the folder containing input files can be set using the parameter "path"
+
+	+path=val
+
+All input files need to be stored in the same folder. Use symbol '//' instead of '/' in the full path.
+
+#### Example:
+*Non-weighted version of the partial dispacement with the smoothing factor $\lambda_{1}=2$,symmetry factor $\lambda_{1}=2$, buffer width $dh=0.1$, setting specific ath*
+
+     simplifyAXS.exe +lambda1=2 +lambda2=2 +dh=0.1 +path=..//data//csv// +buff1=*buffer_B1*.csv +buff2=*buffer_B2*.csv +cont=*contour_lines*.csv
+
+### 1.4.6 Setting the contour lines file mask
+
+User-defined file mask for loading contour line files can be set using the parameter "cont"
+
+	+cont=val
+
+All input files need to be stored in the same folder. Use symbol '//' instead of '/' in the full path.
+File masks can consist of any combination of the following:
+
+ - Characters - Letters, numbers and other characters allowed in file names.
+ - Question mark (?) - Represents any single character.
+ - Asterisk (\*) - Represents any sequence of characters.
+
+The file mask are case sensitive!
+
+### 1.4.7 Setting the vertical buffers file masks
+
+User-defined file mask for loading contour line files can be set using the parameters "buff1", "buff2"
+
+	+buff1=val
+	+buff1=val
+
+where buff1 refers to the lower part $c(h-dh)$ and buff2 to the upper part $c(h+dh)$.
+
+
+## 1.5 Results of the simplification
+
+The resulted contour lines are exported into 3D DXF file. Its name contains the values of input parameters:
+
+      results_contours.xyz_simp_dh_0.10_lambda1_1.00_lambda2_5.00_weighted_1.dxf
+
+For any subset of the point cloud, these files are generated automatically.
+
+![Results](./data/results.jpg)
