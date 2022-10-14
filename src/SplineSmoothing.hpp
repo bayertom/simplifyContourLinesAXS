@@ -52,7 +52,7 @@ Eigen::SparseMatrix<T> SplineSmoothing::diff(Eigen::SparseMatrix<T> E, const int
 		Eigen::SparseMatrix<T> E1 = E.block(0, 0, E.rows() - 1, E.cols());
 		Eigen::SparseMatrix<T> E2 = E.block(1, 0, E.rows() - 1, E.cols());
 
-		//Compute difference
+		//Compute difference matrix
 		E = E2 - E1;
 	}
 
@@ -76,7 +76,7 @@ std::tuple<Eigen::SparseMatrix <T>, Eigen::SparseMatrix <T> > SplineSmoothing::s
 		I = I0;
 	}
 
-	//Different size, compute new inverse metrix
+	//Different size, compute new inverse matrix
 	else
 	{
 		Eigen::SparseMatrix <double> E(m, m);
