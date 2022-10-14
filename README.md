@@ -3,6 +3,7 @@ Basic properties and features of the simplification algorithm, the input data an
 
 
 ## 1.1. Source code
+
 The source code of the simplification software written in C++ (C++ 2020) is bundled as the Visual Studio 2022 project. 
 It depends on the Eigen library
 - Eigen, https://gitlab.com/libeigen/eigen, 
