@@ -9,7 +9,7 @@ It depends on the Eigen library
 
 - Eigen, https://gitlab.com/libeigen/eigen, 
 
-which is bundled. The conversion software preparing the input data (SHP to CSV) was written in Python 2.7.
+which is bundled. The conversion software preparing the input data (SHP to CSV conversion) was written in Python 2.7.
 
 ## 1.2. Running the software
 
