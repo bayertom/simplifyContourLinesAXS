@@ -28,7 +28,7 @@ The simplification algorithm requires fhe following data:
 - Vertical buffer formed by the lower contour c(h - dh).
 - Vertical buffer formed by the upper contour c(h + dh).
 
-![ABN](./data/contours_buffers_fig2.jpg)
+![Buffers](./data/contours_buffers_fig2.jpg)
 
 Each object, represented by contour line fragment or vertical vertical buffer, is stored in a separate CSV file. The input file contains the Cartesian coordinates X, Y, Z of the vertices of contour lines and buffers.
 
@@ -88,7 +88,7 @@ All files in the destination folder, compliant with the user-defined buffer mask
 
      +buff2=*buffer_B2*.csv
      
-are processed one by one.
+are processed one by one. For further details of setting dh, se Sec. 1.4.4.
 
 ### 1.31 Conversion of files
 The bundled Python script
@@ -134,7 +134,7 @@ contour lines acquired from the point cloud, this value may be significantly hig
 
      simplifyAXS.exe +lambda1=2 +buff1=*buffer_B1*.csv +buff2=*buffer_B2*.csv +cont=*contour_lines*.csv
 
-![ABN](./data/variable_alpha2.jpg)
+![Variable alpha](./data/variable_alpha2.jpg)
 
 ### 1.4.3 Setting the symmetry
 
@@ -142,14 +142,14 @@ User-defined symmetry factor can be set using the parameter "lambda2"
 
 	+lambda2=val
 	
-$\lambda_{2}$ regulates the symmetry of simplified contour line due to the vertical buffer. Increasing the values of λ2, the simplified contour gradually moves to the center of vertical buffer. Its values are slightly smaller than $\lambda_{1}$, we set $\lambda_{2}=$\lambda_{1}/2$.
+$\lambda_{2}$ regulates the symmetry of simplified contour line due to the vertical buffer. Increasing the values of λ2, the simplified contour gradually moves to the center of vertical buffer. Its values are slightly smaller than $\lambda_{1}$, we set $\lambda_{2}=\lambda_{1}/2$.
 
 #### Example:
 *Non-weighted version of the partial dispacement with the smoothing factor $\lambda_{1}=2$ and symmetry factor $\lambda_{1}=2$*
 
      simplifyAXS.exe +lambda1=2 +lambda2=2 +buff1=*buffer_B1*.csv +buff2=*buffer_B2*.csv +cont=*contour_lines*.csv
 
-![ABN](./data/smoothing_lambda_compare.jpg)
+![Lambda](./data/smoothing_lambda_compare.jpg)
 
 The resulting solution is a balanced combination of three factors, shape similarity,
 smoothness, and symmetry, regulated by three input parameters
@@ -159,7 +159,12 @@ $w_{i}$, $\lambda_{1}$, and $\lambda_{2}$.
 
 User-defined height of the vertical buffer can be set using the parameter "dh"
 
-	+dz=val
+	+dh=val
 	
-Currently, we set dh < 0.3 * contour interval.
+Currently, we set dh < 0.3 * contour interval. This value has a crucial importance and must be in accordance with the input data formed by two vertical buffers, $c(h-dh)$ and $c(h-dh)$. Recall that dh value is used as part of both filenames; see Sec. 1.3. For example:
+
+      'buffer_B1_270.9_27.csv'
+      'buffer_B2_271.1_3.csv',
+
+![Buffers](./data/buffers2_0_15.jpg)
 
