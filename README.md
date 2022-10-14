@@ -232,6 +232,6 @@ For GIS users, the folder /data/shp contains the ArcMap project
 
      contour_lines.mxd
      
-The source contour lines, both vertical buffers and simplified results are bundled.
+The source contour lines, both vertical buffers and simplified results are bundled. The analyzed area was chosen so that to show some problematic situations, which may occur as a result of direct application of the axial spline without preprocessing the original oscillating contour lines.
 
 ![Results](./data/results2.jpg)
