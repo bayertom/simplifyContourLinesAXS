@@ -230,8 +230,8 @@ The resulted contour lines are exported into 3D DXF file. Its name contains the 
 
 For GIS users, the folder /data/shp contains the ArcMap project
 
-     contour_lines.mxd
+     contour_lines.mxd,
      
-The source contour lines, both vertical buffers and simplified results are bundled. The analyzed area was chosen so that to show some problematic situations, which may occur as a result of direct application of the axial spline without preprocessing the original oscillating contour lines.
+the source contour lines, both vertical buffers, and results after the partial displacement application, are bundled. The analyzed area was chosen so that to show some problematic situations, which may occur as a result of the direct application of the axial spline (without preprocessing the original oscillating contour lines).
 
 ![Results](./data/results2.jpg)
