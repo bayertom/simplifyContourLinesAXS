@@ -202,6 +202,13 @@ File masks can consist of any combination of the following:
 
 The file mask are case sensitive!
 
+#### Example:
+The following file mask 
+      
+      *buffer_B1*.csv
+
+includes all CSV files containg the string 'buffer_B1' in the filename.
+
 ### 1.4.7 Setting the vertical buffers file masks
 
 User-defined file mask for loading contour line files can be set using the parameters "buff1", "buff2"
