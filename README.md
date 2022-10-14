@@ -143,7 +143,7 @@ User-defined symmetry factor can be set using the parameter "lambda2"
 
 	+lambda2=val
 	
-$\lambda_{2}$ regulates the symmetry of simplified contour line due to the vertical buffer. Increasing the values of λ2, the simplified contour gradually moves to the center of vertical buffer. Its values are slightly smaller than $\lambda_{1}$, we set $\lambda_{2}=\lambda_{1}/2$.
+$\lambda_{2}$ regulates the symmetry of simplified contour line due to the vertical buffer. Increasing the values of $λ_{2}$, the simplified contour gradually moves to the center of vertical buffer. Its values are slightly smaller than $\lambda_{1}$, we set $\lambda_{2}=\lambda_{1}/2$.
 
 #### Example:
 *Non-weighted version of the partial dispacement with the smoothing factor $\lambda_{1}=2$ and symmetry factor $\lambda_{1}=2$*
