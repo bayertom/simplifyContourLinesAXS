@@ -6,8 +6,10 @@ Basic properties and features of the simplification algorithm, the input data an
 
 The source code of the simplification software written in C++ (C++ 2020) is bundled as the Visual Studio 2022 project. 
 It depends on the Eigen library
+
 - Eigen, https://gitlab.com/libeigen/eigen, 
-which is bundled.
+
+which is bundled. The conversion software preparing the input data (SHP to CSV conversion) was written in Python 2.7.
 
 ## 1.2. Running the software
 
@@ -89,7 +91,7 @@ All files in the destination folder, compliant with the user-defined buffer mask
 
      +buff2=*buffer_B2*.csv
      
-are processed one by one. For further details of setting dh, se Sec. 1.4.4.
+are processed one by one. For further details of setting dh, see Sec. 1.4.4.
 
 ### 1.31 Conversion of files
 The bundled Python script
@@ -143,7 +145,7 @@ User-defined symmetry factor can be set using the parameter "lambda2"
 
 	+lambda2=val
 	
-$\lambda_{2}$ regulates the symmetry of simplified contour line due to the vertical buffer. Increasing the values of λ2, the simplified contour gradually moves to the center of vertical buffer. Its values are slightly smaller than $\lambda_{1}$, we set $\lambda_{2}=\lambda_{1}/2$.
+$\lambda_{2}$ regulates the symmetry of simplified contour line due to the vertical buffer. Increasing the values of $λ_{2}$, the simplified contour gradually moves to the center of vertical buffer. Its values are slightly smaller than $\lambda_{1}$, we set $\lambda_{2}=\lambda_{1}/2$.
 
 #### Example:
 *Non-weighted version of the partial dispacement with the smoothing factor $\lambda_{1}=2$ and symmetry factor $\lambda_{1}=2$*
@@ -230,8 +232,8 @@ The resulted contour lines are exported into 3D DXF file. Its name contains the 
 
 For GIS users, the folder /data/shp contains the ArcMap project
 
-     contour_lines.mxd
+     contour_lines.mxd,
      
-The source contour lines, both vertical buffers and simplified results are bundled. The analyzed area was chosen so that to show some problematic situations, which may occur as a result of direct application of the axial spline without preprocessing the original oscillating contour lines.
+the source contour lines, both vertical buffers, and results after the partial displacement application, are bundled. The analyzed area was chosen so that to show some problematic situations, which may occur as a result of the direct application of the axial spline (without preprocessing the original oscillating contour lines).
 
 ![Results](./data/results2.jpg)
