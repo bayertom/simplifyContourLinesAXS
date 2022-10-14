@@ -218,6 +218,12 @@ The resulted contour lines are exported into 3D DXF file. Its name contains the 
 
       results_contours.xyz_simp_dh_0.10_lambda1_1.00_lambda2_5.00_weighted_1.dxf
 
-For any subset of the point cloud, these files are generated automatically.
-
 ![Results](./data/results.jpg)
+
+For GIS users, the folder /data/shp contains the ArcMap project
+
+     contour_lines.mxd
+     
+The source contour lines, both vertical buffers and simplified results are bundled.
+
+![Results2(./data/results2jpg)
