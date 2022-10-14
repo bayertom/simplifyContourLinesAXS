@@ -49,8 +49,8 @@ TVector2D < std::shared_ptr <Point3D > > ContourLinesSimplify::smoothContourLine
 	Eigen::SimplicialLDLT <Eigen::SparseMatrix<double> > solver(E0);
 	E0.setIdentity();  W0.setIdentity();
 
-	auto D0 = SplineSmoothing::diff(E0, d);
-	auto D0T = D0.transpose();
+	const auto D0 = SplineSmoothing::diff(E0, d);
+	const auto D0T = D0.transpose();
 	solver.compute(W0 + lambda1 * D0T * D0 + 2.0 * lambda2 * E0);
 	I0 = solver.solve(E0);
 
@@ -120,18 +120,21 @@ TVector2D < std::shared_ptr <Point3D > > ContourLinesSimplify::smoothContourLine
 				int n = cp.size();
 
 				//Find NN to contour line vertices
-				auto [nn_buffs1, nn_idxs1, nn_dist1, nn_points1] = findNearestNeighbors(cp, contour_points_buffer_dh1);
-				auto [nn_buffs2, nn_idxs2, nn_dist2, nn_points2] = findNearestNeighbors(cp, contour_points_buffer_dh2);
+				const auto [nn_buffs1, nn_idxs1, nn_dist1, nn_points1] = findNearestNeighbors(cp, contour_points_buffer_dh1);
+				const auto [nn_buffs2, nn_idxs2, nn_dist2, nn_points2] = findNearestNeighbors(cp, contour_points_buffer_dh2);
 
 				//Create supplementary matrices
 				Eigen::SparseMatrix <double> X(n, 1), Y(n, 1), X1(n, 1), Y1(n, 1), X2(n, 1), Y2(n, 1), W(n, n);
 				W.setIdentity();
+
 				for (int i = 0; i < n; i++)
 				{
 					X.insert(i, 0) = cp[i]->getX();
 					Y.insert(i, 0) = cp[i]->getY();
+
 					X1.insert(i, 0) = nn_points1[i]->getX();
 					Y1.insert(i, 0) = nn_points1[i]->getY();
+
 					X2.insert(i, 0) = nn_points2[i]->getX();
 					Y2.insert(i, 0) = nn_points2[i]->getY();
 				}
@@ -166,7 +169,7 @@ TVector2D < std::shared_ptr <Point3D > > ContourLinesSimplify::smoothContourLine
 				}
 
 				//Perform partial displacement
-				auto [XS, YS] = weighted ? SplineSmoothing::smoothPolylineCorridorE(X, Y, X1, Y1, X2, Y2, W, lambda1, lambda2, d) : SplineSmoothing::smoothPolylineCorridorE(X, Y, X1, Y1, X2, Y2, W, I0, lambda1, lambda2, d);
+				const auto [XS, YS] = weighted ? SplineSmoothing::smoothPolylineCorridorE(X, Y, X1, Y1, X2, Y2, W, lambda1, lambda2, d) : SplineSmoothing::smoothPolylineCorridorE(X, Y, X1, Y1, X2, Y2, W, I0, lambda1, lambda2, d);
 
 				//Convert to points
 				TVector < std::shared_ptr<Point3D > > cps;

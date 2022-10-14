@@ -27,16 +27,16 @@ std::tuple<Eigen::SparseMatrix <T>, Eigen::SparseMatrix <T> > SplineSmoothing::s
 	Eigen::SparseMatrix <T> E(m, m);
 	Eigen::SimplicialLDLT<Eigen::SparseMatrix<T> > solver(E);
 	E.setIdentity();
-	auto D = diff(E, k);
+	const auto D = diff(E, k);
 	
 	//Inverse
-	auto DT = D.transpose();
+	const auto DT = D.transpose();
 	solver.compute(W + lambda1 * DT * D + 2.0 * lambda2 * E);
-	auto I = solver.solve(E);
+	const auto I = solver.solve(E);
 
 	//Solution
-	auto XS = I * (W * X + lambda2 * (X1 + X2));
-	auto YS = I * (W * Y + lambda2 * (Y1 + Y2));
+	const auto XS = I * (W * X + lambda2 * (X1 + X2));
+	const auto YS = I * (W * Y + lambda2 * (Y1 + Y2));
 
 	return { XS, YS };
 }
@@ -84,17 +84,17 @@ std::tuple<Eigen::SparseMatrix <T>, Eigen::SparseMatrix <T> > SplineSmoothing::s
 		E.setIdentity();
 
 		//Difference matrix
-		auto D = SplineSmoothing::diff(E, k);
+		const auto D = SplineSmoothing::diff(E, k);
 
 		//Inverse
-		auto DT = D.transpose();
+		const auto DT = D.transpose();
 		solver.compute(W + lambda1 * DT * D + 2.0 * lambda2 * E);
 		I = solver.solve(E);
 	}
 
 	//Solution
-	auto XS = I * (W * X + lambda2 * (X1 + X2));
-	auto YS = I * (W * Y + lambda2 * (Y1 + Y2));
+	const auto XS = I * (W * X + lambda2 * (X1 + X2));
+	const auto YS = I * (W * Y + lambda2 * (Y1 + Y2));
 
 	return { XS, YS };
 }
