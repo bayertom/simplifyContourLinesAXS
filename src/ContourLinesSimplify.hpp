@@ -248,18 +248,18 @@ std::tuple<TVector <int>, TVector <int>, TVector <float>, TVector <std::shared_p
 		for (int j = 0; j < buffers.size(); j++)
 		{
 			//Find nearest point on the segment
-			const auto [i_min, d_min, xi_min, yi_min] = getNearestLineSegmentPoint(qpoints[i]->getX(), qpoints[i]->getY(), buffers[j]);
+			const auto [i_nn, d_nn, xi_nn, yi_nn] = getNearestLineSegmentPoint(qpoints[i]->getX(), qpoints[i]->getY(), buffers[j]);
 
 			//Update minimum
-			if (d_min < nn_dists[i])
+			if (d_nn < nn_dists[i])
 			{
 				//Create nearest point
-				std::shared_ptr <Point3D> p_min = std::make_shared<Point3D>(xi_min, yi_min);
+				std::shared_ptr <Point3D> p_min = std::make_shared<Point3D>(xi_nn, yi_nn);
 
 				//Actualize lists of neighbors and their indices
 				nn_buffs[i] = j;
-				nn_idxs[i] = i_min;
-				nn_dists[i] = d_min;
+				nn_idxs[i] = i_nn;
+				nn_dists[i] = d_nn;
 				nn_points[i] = p_min;
 			}
 		}
