@@ -201,7 +201,7 @@ TVector2D < std::shared_ptr <Point3D > > ContourLinesSimplify::smoothContourLine
 
 TVector2D <std::shared_ptr <Point3D > > ContourLinesSimplify::splitContourLine(const TVector <std::shared_ptr <Point3D > >& c, const int np)
 {
-	//Split long contour line to shorter segments
+	//Split long contour line to shorter segments of the length np
 	TVector2D <std::shared_ptr <Point3D > > contours;
 
 	//Zero length 
@@ -247,10 +247,10 @@ std::tuple<TVector <int>, TVector <int>, TVector <float>, TVector <std::shared_p
 		//Process all buffer fragments
 		for (int j = 0; j < buffers.size(); j++)
 		{
-			//Find nearest line segment point
+			//Find nearest point on the segment
 			const auto [i_min, d_min, xi_min, yi_min] = getNearestLineSegmentPoint(qpoints[i]->getX(), qpoints[i]->getY(), buffers[j]);
 
-			//We found a closer point
+			//Update minimum
 			if (d_min < nn_dists[i])
 			{
 				//Create nearest point
@@ -271,16 +271,17 @@ std::tuple<TVector <int>, TVector <int>, TVector <float>, TVector <std::shared_p
 
 std::tuple<int, double, double, double> ContourLinesSimplify::getNearestLineSegmentPoint(const double xq, const double yq, const TVector <std::shared_ptr <Point3D > >& points)
 {
-	//Check all line segments
+	//Get nearest point on the line segments
 	int i_min = -1;
 	double d_min = 1.0e16, xi_min = 0, yi_min = 0;
 
+	//Check all line segments
 	for (int i = 0; i < points.size() - 1; i++)
 	{
 		double xi, yi;
-		double d = PointLineDistance::getPointLineSegmentDistance2D(xq, yq, points[i]->getX(), points[i]->getY(), points[i + 1]->getX(), points[i + 1]->getY(), xi, yi);
+		const double d = PointLineDistance::getPointLineSegmentDistance2D(xq, yq, points[i]->getX(), points[i]->getY(), points[i + 1]->getX(), points[i + 1]->getY(), xi, yi);
 
-		//Remember actual minimum
+		//Update minimum
 		if (d < d_min)
 		{
 			i_min = i;
