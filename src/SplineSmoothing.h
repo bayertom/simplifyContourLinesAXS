@@ -27,15 +27,17 @@ class SplineSmoothing
         public:
                
                 template <typename T>
-                static std::tuple<Eigen::SparseMatrix <T>, Eigen::SparseMatrix <T> > smoothPolylineCorridorE(const Eigen::SparseMatrix<T>& X, const Eigen::SparseMatrix<T>& Y, const Eigen::SparseMatrix<T>& X1, const Eigen::SparseMatrix<T>& Y1, const Eigen::SparseMatrix<T>& X2, const Eigen::SparseMatrix<T>& Y2, const Eigen::SparseMatrix<T>& W, const T lambda1, const T lambda2, const int k);
-               
+                static std::tuple<Eigen::SparseMatrix <T>, Eigen::SparseMatrix <T> > smoothPolylineInCorridorAsLS(const Eigen::SparseMatrix<T>& X, const Eigen::SparseMatrix<T>& Y, const Eigen::SparseMatrix<T>& X1, const Eigen::SparseMatrix<T>& Y1, const Eigen::SparseMatrix<T>& X2, const Eigen::SparseMatrix<T>& Y2, const Eigen::SparseMatrix<T>& W, const T lambda1, const T lambda2, const int k);
+
                 template <typename T>
-                static std::tuple<Eigen::SparseMatrix <T>, Eigen::SparseMatrix <T> > smoothPolylineCorridorE(const Eigen::SparseMatrix<T>& X, const Eigen::SparseMatrix<T>& Y, const Eigen::SparseMatrix<T>& X1, const Eigen::SparseMatrix<T>& Y1, const Eigen::SparseMatrix<T>& X2, const Eigen::SparseMatrix<T>& Y2, const Eigen::SparseMatrix<T>& W, const Eigen::SparseMatrix<T>& I0, const T lambda1, const T lambda2, const int k);
+                static std::tuple<Eigen::SparseMatrix <T>, Eigen::SparseMatrix <T> > smoothPolylineInCorridorScaledAsLS(const Eigen::SparseMatrix<T>& X, const Eigen::SparseMatrix<T>& Y, const Eigen::SparseMatrix<T>& X1, const Eigen::SparseMatrix<T>& Y1, const Eigen::SparseMatrix<T>& X2, const Eigen::SparseMatrix<T>& Y2, const Eigen::SparseMatrix<T>& W, const T lambda1, const T lambda2, const int k);
+
+                template <typename T>
+                static std::tuple<Eigen::SparseMatrix <T>, Eigen::SparseMatrix <T> > smoothPolylineInCorridorAsLS(const Eigen::SparseMatrix<T>& X, const Eigen::SparseMatrix<T>& Y, const Eigen::SparseMatrix<T>& X1, const Eigen::SparseMatrix<T>& Y1, const Eigen::SparseMatrix<T>& X2, const Eigen::SparseMatrix<T>& Y2, const Eigen::SparseMatrix<T>& W, const Eigen::SparseMatrix<T>& I0, const T lambda1, const T lambda2, const int k);
 
                 template <typename T>
                 static Eigen::SparseMatrix<T> diff(Eigen::SparseMatrix<T> E, const int k);
 
-         
 };
 
 #include "SplineSmoothing.hpp"

@@ -17,10 +17,13 @@
 #ifndef WhittakerSmoothing_HPP
 #define WhittakerSmoothing_HPP
 
+//#define EIGEN_USE_BLAS
+ 
 template <typename T>
-std::tuple<Eigen::SparseMatrix <T>, Eigen::SparseMatrix <T> > SplineSmoothing::smoothPolylineCorridorE(const Eigen::SparseMatrix <T>& X, const Eigen::SparseMatrix <T>& Y, const Eigen::SparseMatrix <T>& X1, const Eigen::SparseMatrix <T>& Y1, const Eigen::SparseMatrix <T>& X2, const Eigen::SparseMatrix <T>& Y2, const Eigen::SparseMatrix <T>& W, const T lambda1, const T lambda2, const int k)
+std::tuple<Eigen::SparseMatrix <T>, Eigen::SparseMatrix <T> > SplineSmoothing::smoothPolylineInCorridorAsLS(const Eigen::SparseMatrix <T>& X, const Eigen::SparseMatrix <T>& Y, const Eigen::SparseMatrix <T>& X1, const Eigen::SparseMatrix <T>& Y1, const Eigen::SparseMatrix <T>& X2, const Eigen::SparseMatrix <T>& Y2, const Eigen::SparseMatrix <T>& W, const T lambda1, const T lambda2, const int k)
 {
-	//Spline smoothing with the constraints (Eigen version)
+	//Spline smoothing with the constraints (Eigen version).
+	//Non-scaled version, asymetric least squares
 	const unsigned int m = X.rows();
 
 	//Create initial matrices
@@ -34,9 +37,52 @@ std::tuple<Eigen::SparseMatrix <T>, Eigen::SparseMatrix <T> > SplineSmoothing::s
 	solver.compute(W + lambda1 * DT * D + 2.0 * lambda2 * E);
 	const auto I = solver.solve(E);
 
-	//Solution
+	//Solution of AXS
 	const auto XS = I * (W * X + lambda2 * (X1 + X2));
 	const auto YS = I * (W * Y + lambda2 * (Y1 + Y2));
+
+	return { XS, YS };
+}
+
+
+
+template <typename T>
+std::tuple<Eigen::SparseMatrix <T>, Eigen::SparseMatrix <T> > SplineSmoothing::smoothPolylineInCorridorScaledAsLS(const Eigen::SparseMatrix <T>& X, const Eigen::SparseMatrix <T>& Y, const Eigen::SparseMatrix <T>& X1, const Eigen::SparseMatrix <T>& Y1, const Eigen::SparseMatrix <T>& X2, const Eigen::SparseMatrix <T>& Y2, const Eigen::SparseMatrix <T>& W, const T lambda1, const T lambda2, const int k)
+{
+	//Spline smoothing with the constraints (Eigen version)
+	//Scaled version, asymetric least squares
+	const unsigned int m = X.rows();
+
+	//Create initial matrices
+	Eigen::SparseMatrix <T> E(m, m), ZX(m, m), ZY(m, m);
+	Eigen::SimplicialLDLT<Eigen::SparseMatrix<T> > solverx(E), solvery(E);
+	E.setIdentity();
+	const auto D = diff(E, k);
+
+	//Compute elements of ZX, ZY scaling matrices
+	const double min_element = 0.01;
+	for (int i = 0; i < m; i++)
+	{
+		const double dx = std::max(fabs(X1.coeff(i, 0) - X2.coeff(i, 0)), min_element);
+		const double dy = std::max(fabs(Y1.coeff(i, 0) - Y2.coeff(i, 0)), min_element);
+		ZX.insert(i, i) = 1.0 / dx;
+		ZY.insert(i, i) = 1.0 / dy;
+	}
+
+	//Inverse
+	const auto DT = D.transpose();
+	const auto ZXT = ZX.transpose();
+	const auto ZYT = ZY.transpose();
+	
+	solverx.compute(ZXT * W * ZX + lambda1 * DT * D + 2.0 * lambda2 * ZXT * ZX);
+	solvery.compute(ZYT * W * ZY + lambda1 * DT * D + 2.0 * lambda2 * ZYT * ZY);
+
+	const auto Ix = solverx.solve(E);
+	const auto Iy = solvery.solve(E);
+
+	//Solution of AXS
+	const auto XS = Ix * (ZXT * W * ZX * X + lambda2 * ZXT * ZX * (X1 + X2));
+	const auto YS = Iy * (ZYT * W * ZY * Y + lambda2 * ZYT * ZY * (Y1 + Y2));
 
 	return { XS, YS };
 }
@@ -61,9 +107,10 @@ Eigen::SparseMatrix<T> SplineSmoothing::diff(Eigen::SparseMatrix<T> E, const int
 
 
 template <typename T>
-std::tuple<Eigen::SparseMatrix <T>, Eigen::SparseMatrix <T> > SplineSmoothing::smoothPolylineCorridorE(const Eigen::SparseMatrix <T>& X, const Eigen::SparseMatrix <T>& Y, const Eigen::SparseMatrix <T>& X1, const Eigen::SparseMatrix <T>& Y1, const Eigen::SparseMatrix <T>& X2, const Eigen::SparseMatrix <T>& Y2, const Eigen::SparseMatrix <T>& W, const Eigen::SparseMatrix <T>& I0, const T lambda1, const T lambda2, const int k)
+std::tuple<Eigen::SparseMatrix <T>, Eigen::SparseMatrix <T> > SplineSmoothing::smoothPolylineInCorridorAsLS(const Eigen::SparseMatrix <T>& X, const Eigen::SparseMatrix <T>& Y, const Eigen::SparseMatrix <T>& X1, const Eigen::SparseMatrix <T>& Y1, const Eigen::SparseMatrix <T>& X2, const Eigen::SparseMatrix <T>& Y2, const Eigen::SparseMatrix <T>& W, const Eigen::SparseMatrix <T>& I0, const T lambda1, const T lambda2, const int k)
 {
-	//Spline smoothing combined with the constraints (Eigen version)
+	//Spline smoothing with the constraints (Eigen version)
+	//Asymetric least squares
 	//Precomputed inverse matrix
 	const unsigned int m = X.rows();
 
@@ -92,13 +139,11 @@ std::tuple<Eigen::SparseMatrix <T>, Eigen::SparseMatrix <T> > SplineSmoothing::s
 		I = solver.solve(E);
 	}
 
-	//Solution
+	//Solution of AXS
 	const auto XS = I * (W * X + lambda2 * (X1 + X2));
 	const auto YS = I * (W * Y + lambda2 * (Y1 + Y2));
 
 	return { XS, YS };
 }
-
-
 
 #endif

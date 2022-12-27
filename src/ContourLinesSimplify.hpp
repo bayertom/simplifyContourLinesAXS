@@ -31,7 +31,7 @@
 #include "PointLineDistance.h"
 #include "SplineSmoothing.h"
 
-TVector2D < std::shared_ptr <Point3D > > ContourLinesSimplify::smoothContourLinesBySplineE(const TVector2D <std::shared_ptr <Point3D > >& contours, std::multimap <double, TVector < std::shared_ptr < Point3D > > >& contour_points_buffers_dh1, std::multimap <double, TVector < std::shared_ptr < Point3D > > >& contour_points_buffers_dh2, const double dh, const unsigned int min_points, const double lambda1, const double lambda2, const bool weighted)
+TVector2D < std::shared_ptr <Point3D > > ContourLinesSimplify::smoothContourLinesBySplineE(const TVector2D <std::shared_ptr <Point3D > >& contours, std::multimap <double, TVector < std::shared_ptr < Point3D > > >& contour_points_buffers_dh1, std::multimap <double, TVector < std::shared_ptr < Point3D > > >& contour_points_buffers_dh2, const double dh, const unsigned int min_points, const double lambda1, const double lambda2, const int ns, const int k, const bool weighted, const bool scaled)
 {
 	//Simplify contour lines inside the corridor using the spline (Eigen version)
 	TVector2D <std::shared_ptr <Point3D > > contours_smoothed;
@@ -41,15 +41,12 @@ TVector2D < std::shared_ptr <Point3D > > ContourLinesSimplify::smoothContourLine
 
 	std::cout << "\n>>> PHASE: Smoothing contour lines \n\n";
 
-	//Input parameters of the axial spline
-	const int d = 2, n_points = 2000;
-
-	//Precompute inverse matrix
-	Eigen::SparseMatrix <double> E0(n_points, n_points), W0(n_points, n_points), I0(n_points, n_points);
+	//Precompute inverse matrix (non-scaled version)
+	Eigen::SparseMatrix <double> E0(ns, ns), W0(ns, ns), I0(ns, ns);
 	Eigen::SimplicialLDLT <Eigen::SparseMatrix<double> > solver(E0);
 	E0.setIdentity();  W0.setIdentity();
 
-	const auto D0 = SplineSmoothing::diff(E0, d);
+	const auto D0 = SplineSmoothing::diff(E0, k);
 	const auto D0T = D0.transpose();
 	solver.compute(W0 + lambda1 * D0T * D0 + 2.0 * lambda2 * E0);
 	I0 = solver.solve(E0);
@@ -111,7 +108,7 @@ TVector2D < std::shared_ptr <Point3D > > ContourLinesSimplify::smoothContourLine
 			TVector  <std::shared_ptr <Point3D > > contour_smoothed;
 
 			//Split contour line to parts formed by n points
-			const TVector2D  <std::shared_ptr <Point3D > > cparts = splitContourLine(c, n_points);
+			const TVector2D  <std::shared_ptr <Point3D > > cparts = splitContourLine(c, ns);
 
 			//Process parts of the contour line
 			for (auto cp : cparts)
@@ -147,17 +144,17 @@ TVector2D < std::shared_ptr <Point3D > > ContourLinesSimplify::smoothContourLine
 						//K points forward and backward
 						const int i0 = std::max(0, i - 5);
 						const int i2 = std::min(n - 1, i + 5);
-						
+
 						//Coordinate differences
 						const double dx1 = cp[i0]->getX() - cp[i]->getX();
 						const double dy1 = cp[i0]->getY() - cp[i]->getY();
 						const double dx2 = cp[i2]->getX() - cp[i]->getX();
 						const double dy2 = cp[i2]->getY() - cp[i]->getY();
-						
+
 						//Norms
 						const double n1 = sqrt(dx1 * dx1 + dy1 * dy1);
 						const double n2 = sqrt(dx2 * dx2 + dy2 * dy2);
-						
+
 						//Angle between segments
 						const double arg = (dx1 * dx2 + dy1 * dy2) / (n1 * n2);
 						const double om = acos(arg);
@@ -169,9 +166,23 @@ TVector2D < std::shared_ptr <Point3D > > ContourLinesSimplify::smoothContourLine
 				}
 
 				//Perform partial displacement
-				const auto [XS, YS] = weighted ? SplineSmoothing::smoothPolylineCorridorE(X, Y, X1, Y1, X2, Y2, W, lambda1, lambda2, d) : SplineSmoothing::smoothPolylineCorridorE(X, Y, X1, Y1, X2, Y2, W, I0, lambda1, lambda2, d);
+				Eigen::SparseMatrix <double> XS(n, 1), YS(n, 1);
 
-				//Convert to points
+				//Scaled asymetric least squares
+				if (scaled)
+				{
+					const auto [XST, YST] = SplineSmoothing::smoothPolylineInCorridorScaledAsLS(X, Y, X1, Y1, X2, Y2, W, lambda1, lambda2, k);
+					XS = XST; YS = YST;
+				}
+
+				//Asymetric least squares
+				else
+				{
+					const auto [XST, YST] = weighted ? SplineSmoothing::smoothPolylineInCorridorAsLS(X, Y, X1, Y1, X2, Y2, W, lambda1, lambda2, k) : SplineSmoothing::smoothPolylineInCorridorAsLS(X, Y, X1, Y1, X2, Y2, W, I0, lambda1, lambda2, k);
+					XS = XST; YS = YST;
+				}
+				
+				//Convert matrices to points
 				TVector < std::shared_ptr<Point3D > > cps;
 				for (int i = 0; i < n; i++)
 				{

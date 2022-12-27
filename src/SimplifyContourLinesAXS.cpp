@@ -25,15 +25,16 @@
 int main(int argc, char* argv[])
 {
 	//Initial parameters of the contour lines and the simplification
-	bool weighted = false;
-	int min_points = 20;
-	double z_min = 110.0, z_max = 650.0, dh = 0.10;;
-	double lambda1 = 2.0, lambda2 = 2.0;
+	bool weighted = false, scaled = false;
+	int min_points = 20, k = 2, ns = 2000;
+	double z_min = 0.0, z_max = 1000.0, dh = 0.20;;
+	double lambda1 = 6000.0, lambda2 = 2.0;
 	
 	//Path to the folder
 	//std::filesystem::current_path("..//results//");
 	//std::string path = "E:\\Tomas\\CPP\\simplifyContourLinesEMS\\dtm_test\\smoothing_ems_clip\\";
 	//std::string path = "E:\\Tomas\\CPP\\simplifyContourLinesEMS\\smoothing_test\\";
+	//std::string path = "E://Tomas//CPP//simplifyContourLinesEMS//dtm_test//smoothing_iaxs_clip//";
 	std::string path = std::filesystem::current_path().generic_string();
 
 	//Countour line file mask
@@ -64,6 +65,14 @@ int main(int argc, char* argv[])
 						weighted = true;
 						break;
 					}
+
+					//Set scaled version
+					case 's':
+					{
+						scaled = true;
+						break;
+					}
+
 
 					//Terminate character \0 of the argument
 					case '\0':
@@ -120,6 +129,18 @@ int main(int argc, char* argv[])
 				lambda2 = std::max(std::min(atof(value), 100000.0), 0.0);
 			}
 
+			//Set smoothing step
+			else if (!strcmp("k", attribute))
+			{
+				k = std::max(std::min(atoi(value), 5), 1);
+			}
+
+			//Set amount of vertices
+			else if (!strcmp("ns", attribute))
+			{
+				ns = std::max(std::min(atoi(value), 10000), 500);
+			}
+
 			//Set buffer 1 file
 			else if (!strcmp("buff1", attribute))
 			{
@@ -171,7 +192,10 @@ int main(int argc, char* argv[])
 		"  Buffer height = " << dh << '\n' <<
 		"  Lambda1 = " << lambda1 << '\n' <<
 		"  Lambda2 = " << lambda2 << '\n' <<
+		"  Processed vertices = " << ns << '\n' <<
+		"  Smoothing order = " << k << '\n' <<
 		"  Weighted = " << weighted << '\n' <<
+		"  Scaled = " << scaled << '\n' <<
 		"  Contour mask =" << contours_file_mask << '\n' <<
 		"  Buffer 1 mask = " << buff1_file_mask << '\n' <<
 		"  Buffer 2 mask = " << buff2_file_mask << '\n' <<
@@ -208,12 +232,13 @@ int main(int argc, char* argv[])
 	try
 	{
 		//Patial displacement with axial spline
-		TVector2D <std::shared_ptr <Point3D > > contours_polylines_smooth = ContourLinesSimplify::smoothContourLinesBySplineE(contours_polylines, contour_buffers1, contour_buffers2, dh, min_points,lambda1, lambda2, weighted);
+		TVector2D <std::shared_ptr <Point3D > > contours_polylines_smooth = ContourLinesSimplify::smoothContourLinesBySplineE(contours_polylines, contour_buffers1, contour_buffers2, dh, min_points,lambda1, lambda2, ns, k, weighted, scaled);
 
 		//Export simplified contour lines to DXF
 		std::string file_name_simp = "results_" + output_file_name + "_simp_dh_" + std::format("{:.2f}", dh) + "_lambda1_"
-			+ std::format("{:.2f}", lambda1) + "_lambda2_" + std::format("{:.2f}", lambda2) + "_weighted_" 
-			+ std::format("{:1}", int(weighted)) + ".dxf";
+			+ std::format("{:.2f}", lambda1) + "_lambda2_" + std::format("{:.2f}", lambda2) + "_ns_"
+			+ std::format("{:1}", int(ns)) + +"_k_" + std::format("{:1}", int(k)) + "_weighted_" 
+			+ std::format("{:1}", int(weighted)) + "_scaled_" + std::format("{:1}", int(scaled)) + ".dxf";
 		
 		DXFExport::exportContourLinesToDXF(file_name_simp, contours_polylines_smooth, 10.0);
 	}
