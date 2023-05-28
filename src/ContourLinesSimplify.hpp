@@ -1,4 +1,4 @@
-// Description: Contour line simplification using potential and minimum energy splines
+// Description: Contour line simplification using minimum energy splines
 
 // Copyright (c) 2021 - 2023
 // Tomas Bayer
