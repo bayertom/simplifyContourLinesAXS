@@ -1,5 +1,5 @@
 // Description: Contour line simplification using minimum energy splines
-// Main cpp file: read imput files, simplify and export simplified contour lines
+// Main cpp file: read input files (contour lines + buffers), simplify, and export simplified contour lines
 
 // Copyright (c) 2021 - 2023
 // Tomas Bayer
