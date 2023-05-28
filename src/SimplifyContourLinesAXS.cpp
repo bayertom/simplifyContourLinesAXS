@@ -1,15 +1,34 @@
+// Description: Contour line simplification using minimum energy splines
+// Main cpp file: read imput files, simplify and export simplified contour lines
+
+// Copyright (c) 2021 - 2023
+// Tomas Bayer
+// Charles University in Prague, Faculty of Science
+// bayertom@natur.cuni.cz
+
+// This library is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published
+// by the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this library. If not, see <http://www.gnu.org/licenses/>
+
+
 #define _CRT_SECURE_NO_WARNINGS
 #define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
 
 #include <vector>
-//#include <set>
-//#include <map>
 #include <fstream>
 #include <sstream>
 #include <iostream>
 #include <memory>
 #include <format>
-//#include <algorithm>
 #include <string>
 #include <filesystem>
 
@@ -27,7 +46,7 @@ int main(int argc, char* argv[])
 	//Initial parameters of the contour lines and the simplification
 	bool weighted = false, scaled = false;
 	int min_points = 20, k = 2, ns = 2000;
-	double z_min = 0.0, z_max = 1000.0, dh = 0.20;;
+	double z_min = 0.0, z_max = 1000.0, dh = 0.20;
 	double lambda1 = 6000.0, lambda2 = 2.0;
 	
 	//Path to the folder
@@ -73,7 +92,6 @@ int main(int argc, char* argv[])
 						break;
 					}
 
-
 					//Terminate character \0 of the argument
 					case '\0':
 						break;
@@ -87,7 +105,6 @@ int main(int argc, char* argv[])
 				break;
 			}
 		}
-
 
 		//Set values
 		else if (*argv[argc] == '+')
@@ -116,11 +133,10 @@ int main(int argc, char* argv[])
 				dh = std::max(std::min(atof(value), 1.0), 0.0);
 			}
 
-
 			//Set lambda1
 			else if (!strcmp("lambda1", attribute))
 			{
-				lambda1 = std::max(std::min(atof(value), 100000.0), 0.0);
+				lambda1 = std::max(std::min(atof(value), 1000000.0), 0.0);
 			}
 
 			//Set lambda2

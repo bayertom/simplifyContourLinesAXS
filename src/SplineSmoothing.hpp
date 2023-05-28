@@ -1,4 +1,9 @@
-// Description: Whittaker smoothing method using convolution kernel
+// Description: Smoothing using the minimum energy (axial) spline
+
+// Copyright (c) 2021 - 2023
+// Tomas Bayer
+// Charles University in Prague, Faculty of Science
+// bayertom@natur.cuni.cz
 
 // This library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published
@@ -14,10 +19,9 @@
 // along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 
-#ifndef WhittakerSmoothing_HPP
-#define WhittakerSmoothing_HPP
+#ifndef SplineSmoothing_HPP
+#define SplineSmoothing_HPP
 
-//#define EIGEN_USE_BLAS
  
 template <typename T>
 std::tuple<Eigen::SparseMatrix <T>, Eigen::SparseMatrix <T> > SplineSmoothing::smoothPolylineInCorridorAsLS(const Eigen::SparseMatrix <T>& X, const Eigen::SparseMatrix <T>& Y, const Eigen::SparseMatrix <T>& X1, const Eigen::SparseMatrix <T>& Y1, const Eigen::SparseMatrix <T>& X2, const Eigen::SparseMatrix <T>& Y2, const Eigen::SparseMatrix <T>& W, const T lambda1, const T lambda2, const int k)
@@ -45,9 +49,8 @@ std::tuple<Eigen::SparseMatrix <T>, Eigen::SparseMatrix <T> > SplineSmoothing::s
 }
 
 
-
 template <typename T>
-std::tuple<Eigen::SparseMatrix <T>, Eigen::SparseMatrix <T> > SplineSmoothing::smoothPolylineInCorridorScaledAsLS(const Eigen::SparseMatrix <T>& X, const Eigen::SparseMatrix <T>& Y, const Eigen::SparseMatrix <T>& X1, const Eigen::SparseMatrix <T>& Y1, const Eigen::SparseMatrix <T>& X2, const Eigen::SparseMatrix <T>& Y2, const Eigen::SparseMatrix <T>& W, const T lambda1, const T lambda2, const int k)
+std::tuple<Eigen::SparseMatrix <T>, Eigen::SparseMatrix <T> > SplineSmoothing::smoothPolylineInCorridorAsLSS(const Eigen::SparseMatrix <T>& X, const Eigen::SparseMatrix <T>& Y, const Eigen::SparseMatrix <T>& X1, const Eigen::SparseMatrix <T>& Y1, const Eigen::SparseMatrix <T>& X2, const Eigen::SparseMatrix <T>& Y2, const Eigen::SparseMatrix <T>& W, const T lambda1, const T lambda2, const int k)
 {
 	//Spline smoothing with the constraints (Eigen version)
 	//Scaled version, asymetric least squares
@@ -77,12 +80,54 @@ std::tuple<Eigen::SparseMatrix <T>, Eigen::SparseMatrix <T> > SplineSmoothing::s
 	solverx.compute(ZXT * W * ZX + lambda1 * DT * D + 2.0 * lambda2 * ZXT * ZX);
 	solvery.compute(ZYT * W * ZY + lambda1 * DT * D + 2.0 * lambda2 * ZYT * ZY);
 
-	const auto Ix = solverx.solve(E);
-	const auto Iy = solvery.solve(E);
+	const auto IX = solverx.solve(E);
+	const auto IY = solvery.solve(E);
 
 	//Solution of AXS
-	const auto XS = Ix * (ZXT * W * ZX * X + lambda2 * ZXT * ZX * (X1 + X2));
-	const auto YS = Iy * (ZYT * W * ZY * Y + lambda2 * ZYT * ZY * (Y1 + Y2));
+	const auto XS = IX * (ZXT * W * ZX * X + lambda2 * ZXT * ZX * (X1 + X2));
+	const auto YS = IY * (ZYT * W * ZY * Y + lambda2 * ZYT * ZY * (Y1 + Y2));
+
+	return { XS, YS };
+}
+
+
+template <typename T>
+std::tuple<Eigen::SparseMatrix <T>, Eigen::SparseMatrix <T> > SplineSmoothing::smoothPolylineInCorridorAsLSS2(const Eigen::SparseMatrix <T>& X, const Eigen::SparseMatrix <T>& Y, const Eigen::SparseMatrix <T>& X1, const Eigen::SparseMatrix <T>& Y1, const Eigen::SparseMatrix <T>& X2, const Eigen::SparseMatrix <T>& Y2, const Eigen::SparseMatrix <T>& W, const T lambda1, const T lambda2, const int k)
+{
+	//Spline smoothing with the constraints (Eigen version)
+	//Scaled version, asymetric least squares
+	const unsigned int m = X.rows();
+
+	//Create initial matrices
+	Eigen::SparseMatrix <T> E(m, m), ZX(m, m), ZY(m, m);
+	Eigen::SimplicialLDLT<Eigen::SparseMatrix<T> > solverx(E), solvery(E);
+	E.setIdentity();
+	const auto D = diff(E, k);
+
+	//Compute elements of ZX, ZY scaling matrices
+	const double min_element = 0.01;
+	for (int i = 0; i < m; i++)
+	{
+		const double dx = std::max(fabs(X1.coeff(i, 0) - X2.coeff(i, 0)), min_element);
+		const double dy = std::max(fabs(Y1.coeff(i, 0) - Y2.coeff(i, 0)), min_element);
+		ZX.insert(i, i) = 1.0 / dx;
+		ZY.insert(i, i) = 1.0 / dy;
+	}
+
+	//Inverse
+	const auto DT = D.transpose();
+	const auto ZXT = ZX.transpose();
+	const auto ZYT = ZY.transpose();
+
+	solverx.compute(W + lambda1 * DT * D + 2.0 * lambda2 * ZXT * ZX);
+	solvery.compute(W + lambda1 * DT * D + 2.0 * lambda2 * ZYT * ZY);
+
+	const auto IX = solverx.solve(E);
+	const auto IY = solvery.solve(E);
+
+	//Solution of AXS
+	const auto XS = IX * (W * X + lambda2 * ZXT * ZX * (X1 + X2));
+	const auto YS = IY * (W * Y + lambda2 * ZYT * ZY * (Y1 + Y2));
 
 	return { XS, YS };
 }

@@ -1,5 +1,10 @@
 // Description: Contour line simplification using potential and minimum energy splines
 
+// Copyright (c) 2021 - 2023
+// Tomas Bayer
+// Charles University in Prague, Faculty of Science
+// bayertom@natur.cuni.cz
+
 // This library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published
 // by the Free Software Foundation, either version 3 of the License, or
@@ -171,7 +176,7 @@ TVector2D < std::shared_ptr <Point3D > > ContourLinesSimplify::smoothContourLine
 				//Scaled asymetric least squares
 				if (scaled)
 				{
-					const auto [XST, YST] = SplineSmoothing::smoothPolylineInCorridorScaledAsLS(X, Y, X1, Y1, X2, Y2, W, lambda1, lambda2, k);
+					const auto [XST, YST] = SplineSmoothing::smoothPolylineInCorridorAsLSS(X, Y, X1, Y1, X2, Y2, W, lambda1, lambda2, k);
 					XS = XST; YS = YST;
 				}
 

@@ -1,4 +1,9 @@
 // Description: Compute Euclidian distance
+// 
+// Copyright (c) 2021 - 2023
+// Tomas Bayer
+// Charles University in Prague, Faculty of Science
+// bayertom@natur.cuni.cz
 
 // This library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published
